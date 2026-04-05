@@ -1,0 +1,10 @@
+# IceWM prefoverride — survives theme changes
+# Install: cp icewm-prefoverride ~/.icewm/prefoverride
+
+# Taskbar at top (macOS menu bar style)
+TaskBarAtTop=1
+
+# Disable edge switching — conflicts with tint2 autohide at bottom edge
+VerticalEdgeSwitch=0
+HorizontalEdgeSwitch=0
+EdgeSwitch=0
