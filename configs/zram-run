@@ -1,7 +1,6 @@
 #!/bin/sh
-# ZRAM swap with lz4 — antiX-26 runit one-shot service
-# Install: sudo cp zram-run /etc/sv/zram/run && sudo chmod 755 /etc/sv/zram/run
-#          sudo ln -sf /etc/sv/zram /etc/runit/runsvdir/default/
+# ZRAM swap with lz4 - 900MB
+# antiX-26 runit one-shot service (configured 2026-04-05)
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 export PATH
@@ -11,7 +10,7 @@ if grep -q zram /proc/swaps 2>/dev/null; then
     echo "zram already active"
 else
     if modprobe zram; then
-        # Wait for device node (race condition with modprobe)
+        # Wait for device node
         for i in 1 2 3 4 5; do
             [ -e /dev/zram0 ] && break
             sleep 1
@@ -19,13 +18,13 @@ else
 
         if [ -e /dev/zram0 ]; then
             echo lz4 > /sys/block/zram0/comp_algorithm
-            echo 943718400 > /sys/block/zram0/disksize  # 900MB
+            echo 943718400 > /sys/block/zram0/disksize
             mkswap --label ZRAM_SWAP /dev/zram0
             swapon --priority 100 /dev/zram0
             sysctl vm.swappiness=60
             echo "zram lz4 900MB active, swappiness=60"
         else
-            echo "ERROR: /dev/zram0 did not appear after modprobe"
+            echo "ERROR: /dev/zram0 not found after modprobe"
         fi
     else
         echo "ERROR: modprobe zram failed"

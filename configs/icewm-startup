@@ -1,0 +1,6 @@
+#!/bin/bash
+#Check localization of Zzz File Manager:r:
+if [ ! -f ~/.config/zzzfm/zzzfm_already_localized ]; then zzzfmlocalize ; fi
+
+# macOS-style dock
+sleep 2 && G_SLICE=always-malloc tint2 -c ~/.config/tint2/tint2-dock.conf &
