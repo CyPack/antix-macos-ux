@@ -12,3 +12,4 @@
 | Atom x5-Z8350 has SSE4.2 but NO AVX2 | Compression algorithms relying on AVX2 (zstd) perform 3-5x slower. Always use lz4/lzo-rle for zram on Cherry Trail Atoms | 2026-04-05 |
 | eMMC write endurance concern is overblown | 29GB eMMC with TLC flash: ~87TB total writes. At 1GB/day swap = 238 years. Not a real concern for occasional swap use | 2026-04-05 |
 | Dutch locale on antiX — error messages in Dutch | `Bestand of map bestaat niet` = file not found, `opdracht niet gevonden` = command not found, `Pakketlijsten worden ingelezen` = reading package lists. Don't be confused by locale | 2026-04-05 |
+| `.desktop` files with `NoDisplay=true` break tint2 launcher | Some system apps (e.g. `icewm-manager-gui.desktop`) have `NoDisplay=true`. Adding these to tint2 launcher causes black square / empty panel. Always `grep NoDisplay` before adding to dock. Create custom copy without `NoDisplay=true` if needed | 2026-04-05 |
