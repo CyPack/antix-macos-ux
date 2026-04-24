@@ -1,0 +1,8 @@
+# >>> wifi-tray supervisor start >>>
+# wifi-tray — ConnMan tray icon with 15s crash-recovery supervisor.
+# Purpose: auto-launch cmst in tray mode and respawn it if it dies.
+# Managed by: https://github.com/CyPack/antix-macos-ux/tree/main/wifi-tray
+# Uninstall:  scripts/uninstall.sh  (removes this block by marker match)
+# Do NOT edit by hand — use scripts/install.sh or scripts/uninstall.sh.
+(sleep 2; while :; do pgrep -x cmst >/dev/null || cmst -m; sleep 15; done) &
+# <<< wifi-tray supervisor end <<<

@@ -108,3 +108,39 @@ zstd -d backup.img.zst -c | ssh antix 'sudo dd of=/dev/mmcblk0 bs=4M'
 | 3. No restart needed | ZzzFM refreshes automatically | |
 
 **Pre-conditions:** zzz-icewm session (default antiX-26)
+
+---
+
+## GP-5: ConnMan Wi-Fi Tray Icon with Crash Recovery (antiX + IceWM)
+
+| Step | Command / Action | Notes |
+|------|------------------|-------|
+| 1. Verify backend | `connmanctl state` — must return `State = online` (or `ready`) | Confirms connman is the active manager; nm-applet will NOT work here |
+| 2. Verify cmst installed | `dpkg -l cmst \|\| sudo apt-get install -y cmst` | antiX-26 trixie includes `cmst` in main |
+| 3. Install tray + supervisor | `bash wifi-tray/scripts/install.sh` | Idempotent, marker-bracketed injection into `~/.icewm/startup` |
+| 4. Verify live launch | `pgrep -a cmst && pgrep -af 'pgrep -x cmst'` | Expect one cmst process AND one supervisor loop |
+| 5. Test respawn | `pkill -x cmst` then `sleep 20 && pgrep -a cmst` | Within 15s a new cmst PID appears, icon returns |
+| 6. Inspect diagnostics | `bash wifi-tray/scripts/diagnose.sh` | Read-only state probe — paste into bug reports |
+
+**Supervisor loop (what gets injected into `~/.icewm/startup`):**
+
+```bash
+# >>> wifi-tray supervisor start >>>
+(sleep 2; while :; do pgrep -x cmst >/dev/null || cmst -m; sleep 15; done) &
+# <<< wifi-tray supervisor end <<<
+```
+
+**Critical constants:**
+
+| Value | Why |
+|-------|-----|
+| `sleep 2` initial delay | IceWM's `_NET_SYSTEM_TRAY_S0` owner needs ~500-1500ms after session start; 2s is the empirical 100%-success floor |
+| `pgrep -x cmst` | Exact-name match only. Without `-x`, strings like `cmst-config` would match and skip the respawn |
+| `sleep 15` poll | Sweet spot: worst-case 15s user-visible outage, ~0.02% CPU cost |
+| Marker comments | Enable surgical removal via `uninstall.sh`; never edit them |
+
+**Pre-conditions:** antiX (or any distro with connman + IceWM), cmst package, IceWM `TaskBarShowTray=1` (default)
+
+**Uninstall:** `bash wifi-tray/scripts/uninstall.sh` — removes the marker block and kills running processes. Does NOT remove the cmst package.
+
+**Full reference:** [`wifi-tray/README.md`](../wifi-tray/README.md), [`wifi-tray/GUIDE.md`](../wifi-tray/GUIDE.md)
