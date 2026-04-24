@@ -22,7 +22,6 @@ Real-world, battle-tested configurations and lessons learned from setting up a m
 | **zram lz4** | Compressed swap in RAM — runit service, reboot-safe | ~0 (kernel) |
 | **tint2 dock** | macOS-style bottom dock with autohide | ~24MB |
 | **IceWM config** | Taskbar at top (menu bar style), edge switch disabled | 0 |
-| **[Trackpad tuning](./trackpad/)** | libinput AccelSpeed + adaptive profile, full guide for thumb-on-trackpad workflow | 0 |
 | **Backup strategy** | Full eMMC dd image over SSH with zstd compression | N/A |
 
 ## Quick Start
@@ -143,15 +142,6 @@ lessons/
 ├── errors.md                # 7 known errors with fixes
 ├── golden-paths.md          # 4 proven step-by-step workflows
 └── edge-cases.md            # 10 edge cases and gotchas
-
-trackpad/                    # Trackpad/mouse tuning (libinput AccelSpeed + profile)
-├── README.md                # Hızlı özet + kullanım felsefesi
-├── GUIDE.md                 # Tam teknik rehber (driver, property, test, persistence)
-├── CONTEXTUAL-RESEARCH.md   # Farklı cihazlar için araştırma metodolojisi
-├── AGENT-RULES.md           # AI agent trigger + karar ağacı + anti-pattern
-├── SESSION-LOG.md           # Yapılan tüm tuning oturumları
-├── configs/                 # Canonical + minimal xorg.conf.d files
-└── scripts/                 # inspect / test-speed / apply / restore
 ```
 
 ## Forum References
