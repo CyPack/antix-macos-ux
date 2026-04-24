@@ -22,6 +22,7 @@ Real-world, battle-tested configurations and lessons learned from setting up a m
 | **zram lz4** | Compressed swap in RAM — runit service, reboot-safe | ~0 (kernel) |
 | **tint2 dock** | macOS-style bottom dock with autohide | ~24MB |
 | **IceWM config** | Taskbar at top (menu bar style), edge switch disabled | 0 |
+| **wifi-tray/** | ConnMan tray icon with crash-recovery supervisor | ~28MB |
 | **Backup strategy** | Full eMMC dd image over SSH with zstd compression | N/A |
 
 ## Quick Start
@@ -78,7 +79,18 @@ mkdir -p ~/Desktop/Applications
 cp /usr/share/applications/*.desktop ~/Desktop/Applications/
 ```
 
-### 4. Full System Backup (eMMC over SSH)
+### 4. Wi-Fi Tray Icon with Crash Recovery (`wifi-tray/`)
+
+```bash
+# Idempotent one-liner installer:
+bash wifi-tray/scripts/install.sh
+```
+
+Fixes the "wifi icon missing from bottom-right tray" issue on antiX + IceWM. Auto-launches `cmst` (ConnMan tray) and keeps it alive with a 15-second supervisor loop — survives crashes, user-kills, and power cycles.
+
+See [`wifi-tray/README.md`](wifi-tray/README.md) for the quick start and [`wifi-tray/GUIDE.md`](wifi-tray/GUIDE.md) for the deep dive (connman internals, XEMBED protocol, supervisor pattern rationale).
+
+### 5. Full System Backup (eMMC over SSH)
 
 ```bash
 # From your host machine:
@@ -138,10 +150,19 @@ configs/
 ├── icewm-prefoverride       # ~/.icewm/prefoverride — taskbar top + edge switch off
 └── icewm-startup            # ~/.icewm/startup snippet — dock autostart
 
+wifi-tray/                   # ConnMan tray icon stability — standalone sub-project
+├── README.md                # Start here
+├── GUIDE.md                 # Deep technical reference (~20KB)
+├── CONTEXTUAL-RESEARCH.md   # Why connman, tray alternatives, X11 tray protocol
+├── AGENT-RULES.md           # Rules for AI agents modifying this area
+├── SESSION-LOG.md           # Chronological implementation log
+├── configs/                 # icewm-startup-snippet + supervisor script
+└── scripts/                 # install.sh / uninstall.sh / diagnose.sh
+
 lessons/
-├── errors.md                # 7 known errors with fixes
-├── golden-paths.md          # 4 proven step-by-step workflows
-└── edge-cases.md            # 10 edge cases and gotchas
+├── errors.md                # known errors with fixes
+├── golden-paths.md          # proven step-by-step workflows
+└── edge-cases.md            # edge cases and gotchas
 ```
 
 ## Forum References
